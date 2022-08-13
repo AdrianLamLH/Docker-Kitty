@@ -20,7 +20,7 @@ win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
 # Set window transparency color
 win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(*transparency), 0, win32con.LWA_COLORKEY)
 
-
+win32gui.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 1)
 
 
 # Initialize internal clock
