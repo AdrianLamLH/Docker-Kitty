@@ -56,7 +56,7 @@ class Pet(pygame.sprite.Sprite):
         if (self.status_count < 1): # choose a random new move and the amount of times it does that same action
                                     # given current action is out of moves
             self.dir = 0
-            self.status = self.status_list[1]
+            self.status = self.status_list[random.randint(0,2)]
             self.status_count = random.randint(10,70)
             if (self.status == "walk"):
                 self.dir = random.randint(0,1) # choose random direction if walking chosen
