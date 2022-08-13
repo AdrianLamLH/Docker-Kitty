@@ -35,36 +35,41 @@ class Pet(pygame.sprite.Sprite):
         self.m_cwd = os.getcwd() # gets the current path to directory HackAlphaX
         self.image_num = 0 # counts which frame of animation it's on
         # loads in a default initial frame to be idle
-        self.image = pygame.image.load(self.m_cwd+"\pet_idle\idle"+str(self.image_num)+".png")
+        self.dir = 0 # 0 is left, 1 is right
+        self.image = pygame.image.load(self.m_cwd+"\pet_animations\idle"+str(self.image_num+self.dir*4)+".png")
         self.image = pygame.transform.scale(self.image,(200,200)) # scale image to size
         self.rect = self.image.get_rect() # makes the image an interactable sprite object
         self.rect.x = x # pet sprite coordinates
         self.rect.y = y
-        self.dir = 0 # 0 is left, 1 is right
         self.speed = 6 # how fast pet moves
         self.status_list = ["idle","walk","sleep"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        self.status = self.status_list[0] # idle as default
+        self.status = self.status_list[random.randint(0,2)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
     
     def update(self):
         self.image_num = (self.image_num+1)%4 # chooses animation (%4 because there are 4 images per animation cycle)
         # label the animations carefully in format [ACTIONNAME][NUMBER FROM 0-3].png
-        self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+str(self.image_num)+".png")
+        self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+str(self.image_num+self.dir*4)+".png")
         self.image = pygame.transform.scale(self.image,(200,200))
         self.status_count-= 1 # decreases move counter to acknowledge a move is made
         if (self.status_count < 1): # choose a random new move and the amount of times it does that same action
                                     # given current action is out of moves
-            self.status = self.status_list[random.randint(0,2)]
+            self.dir = 0
+            self.status = self.status_list[1]
             self.status_count = random.randint(10,70)
             if (self.status == "walk"):
                 self.dir = random.randint(0,1) # choose random direction if walking chosen
-            print(self.status) # just for debugging = shows you what new random move is being selected
+            print(self.status, self.dir) # just for debugging = shows you what new random move is being selected
         elif (self.status == "walk"):
             if ((self.dir == 0) and ((self.rect.x-self.speed)>screen_bounds["MIN"])):
                 self.rect.x = (self.rect.x - self.speed) # move the character given it's current direction
-            elif (self.dir == 1):                        # stop if out of bounds
-                self.rect.x = (self.rect.x + self.speed)%screen_bounds["MAX_R"]
+            elif (self.dir ==0):
+                self.dir = 1
+            elif (self.dir == 1) and ((self.rect.x + self.speed)<screen_bounds["MAX_R"]):                        # stop if out of bounds
+                self.rect.x = self.rect.x + self.speed
+            elif (self.dir == 1):
+                self.dir = 0
 
 
 
@@ -90,4 +95,4 @@ while not done:
     pygame.display.flip()
  
     # Determine FPS
-    clock.tick(6)
+    clock.tick(4)
