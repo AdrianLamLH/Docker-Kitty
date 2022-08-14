@@ -42,7 +42,7 @@ class Pet(pygame.sprite.Sprite):
         self.rect.x = x # pet sprite coordinates
         self.rect.y = y
         self.speed = 8 # how fast pet moves
-        self.status_list = ["idle","walk","sleepb"] # list of behaviours (it's ordered so add new moves
+        self.status_list = ["idle","walk","sleep"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
         # self.status_list = ["sleepb"]
         self.status = self.status_list[random.randint(0,2)] # idle as default
