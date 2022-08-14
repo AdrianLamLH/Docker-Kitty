@@ -9,6 +9,7 @@ import time
 import json
 import requests
 from threading import Timer
+from textwrap import fill
 pygame.init()
 
 url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
@@ -46,11 +47,12 @@ clock = pygame.time.Clock()
 quote_length_time = 4000
 quote_frequency = 5000
 
+# speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
 
 #speech bubble
 def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
 
-    font = pygame.font.SysFont(None, size)
+    font = pygame.font.SysFont("comicsansms", 20)
     text_surface = font.render(text, True, text_colour)
     text_rect = text_surface.get_rect(midbottom=pos)
 
@@ -95,7 +97,8 @@ class Pet(pygame.sprite.Sprite):
         self.falling = 0 # checks if pet falling
         self.status_list = ["idle","walk","sleepb","wag","pat"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", "For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C."]
+        temp = "For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C."
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", temp]
         self.motivate = 0
         self.status = self.status_list[random.randint(0,3)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
@@ -110,7 +113,7 @@ class Pet(pygame.sprite.Sprite):
                 self.falling = 0
         elif self.image_delay < 1:
             if self.motivate and self.advice_text != "":
-                speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 80)
+                speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
             self.image_num = (self.image_num+1)%4 # chooses animation (%4 because there are 4 images per animation cycle)
             # label the animations carefully in format [ACTIONNAME][NUMBER FROM 0-3].png
             self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+"\\"+self.status+str(self.image_num+self.dir*4)+".png").convert_alpha()
