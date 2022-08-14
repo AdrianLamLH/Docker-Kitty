@@ -23,9 +23,6 @@ headers = {
 
 response = requests.request("GET", url, headers=headers, params=querystring)
 response_dict = json.loads(response.text)
-#print(response.text)
-print("For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C.")
-
 # Initialize start loop condition
 done = False
 # Setup window screen
@@ -46,8 +43,6 @@ clock = pygame.time.Clock()
 
 quote_length_time = 4000
 quote_frequency = 5000
-
-# speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
 
 #speech bubble
 def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
@@ -97,8 +92,10 @@ class Pet(pygame.sprite.Sprite):
         self.falling = 0 # checks if pet falling
         self.status_list = ["idle","walk","sleepb","wag","pat"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        temp = "For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C."
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", temp]
+        temp = "For Today's weather in, "+str(response_dict["data"][0]["timezone"])+", there are "+str(response_dict["data"][0]["weather"]["description"])+" with temperatures of " + str(response_dict["data"][0]["temp"])+"C."
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", str(temp),"Eat healthy","Remember to stretch your legs","Get active","Dont skimp on sleep","Get help if you need it","Feeling stressed? Smile!", "Do something with your friends and family","You are not alone. You are seen. I am with you. You are not alone.",
+"There is hope, even when your brain tells you there isnt.",
+"The humanity we all share is more important than the mental illnesses we may not"]
         self.motivate = 0
         self.status = self.status_list[random.randint(0,3)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
@@ -126,7 +123,6 @@ class Pet(pygame.sprite.Sprite):
                 self.status_count = random.randint(10,70)
                 if (self.status == "walk"):
                     self.dir = random.randint(0,1) # choose random direction if walking chosen
-                print(self.status, self.dir) # just for debugging = shows you what new random move is being selected
             elif (self.status == "walk"):
                 if ((self.dir == 0) and ((self.rect.x-self.speed)>screen_bounds["MIN"])):
                     self.rect.x = (self.rect.x - self.speed) # move the character given it's current direction
@@ -161,7 +157,7 @@ while not done:
         elif event.type == quote:
             #Sets up timer for quotes
             pygame.time.set_timer(quote_length, quote_length_time)
-            pet.advice_text = pet.checkin[random.randint(0,4)]
+            pet.advice_text = pet.checkin[0,14]
             pet.motivate = True
         elif event.type == quote_length:
             pet.motivate = False
