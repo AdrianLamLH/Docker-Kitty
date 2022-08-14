@@ -41,8 +41,8 @@ win32gui.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 1)
 # Initialize internal clock
 clock = pygame.time.Clock()
 
-quote_length_time = 5000
-quote_frequency = 50000
+quote_length_time = 6000
+quote_frequency = 12000
 
 #speech bubble
 def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
@@ -92,8 +92,7 @@ class Pet(pygame.sprite.Sprite):
         self.falling = 0 # checks if pet falling
         self.status_list = ["idle","walk","sleepb","wag","pat"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        temp = "For Today's weather in, "+str(response_dict["data"][0]["timezone"])+", there are "+str(response_dict["data"][0]["weather"]["description"])+" with temperatures of " + str(response_dict["data"][0]["temp"])+"C."
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", str(temp),"Eat healthy","Remember to stretch your legs","Get active","Dont skimp on sleep","Get help if you need it","Feeling stressed? Smile!", "Do something with your friends and family","You are not alone. You are seen. I am with you. You are not alone.",
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!","Eat healthy","Remember to stretch your legs","Get active","Dont skimp on sleep","Get help if you need it","Feeling stressed? Smile!", "Do something with your friends and family","You are not alone. You are seen. I am with you. You are not alone.",
 "There is hope, even when your brain tells you there isnt.",
 "The humanity we all share is more important than the mental illnesses we may not"]
         self.motivate = 0
@@ -157,7 +156,7 @@ while not done:
         elif event.type == quote:
             #Sets up timer for quotes
             pygame.time.set_timer(quote_length, quote_length_time)
-            pet.advice_text = pet.checkin[random.randint(0,14)]
+            pet.advice_text = pet.checkin[random.randint(0,13)]
             pet.motivate = True
         elif event.type == quote_length:
             pet.motivate = False
