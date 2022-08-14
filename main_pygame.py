@@ -6,6 +6,7 @@ import win32gui
 import random
 import os
 import time
+import json
 import requests
 from threading import Timer
 pygame.init()
@@ -20,8 +21,9 @@ headers = {
 }
 
 response = requests.request("GET", url, headers=headers, params=querystring)
-
-print(response.text)
+response_dict = json.loads(response.text)
+#print(response.text)
+print("For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C.")
 
 # Initialize start loop condition
 done = False
@@ -42,7 +44,7 @@ win32gui.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 1)
 clock = pygame.time.Clock()
 
 quote_length_time = 4000
-quote_frequency = 12000
+quote_frequency = 5000
 
 
 #speech bubble
@@ -93,7 +95,7 @@ class Pet(pygame.sprite.Sprite):
         self.falling = 0 # checks if pet falling
         self.status_list = ["idle","walk","sleepb","wag","pat"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!"]
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!", "For Today's weather in,",response_dict["data"][0]["timezone"]+", there are",response_dict["data"][0]["weather"]["description"],"with temperatures of",str(response_dict["data"][0]["temp"])+"C."]
         self.motivate = 0
         self.status = self.status_list[random.randint(0,3)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
@@ -156,7 +158,7 @@ while not done:
         elif event.type == quote:
             #Sets up timer for quotes
             pygame.time.set_timer(quote_length, quote_length_time)
-            pet.advice_text = pet.checkin[random.randint(0,2)]
+            pet.advice_text = pet.checkin[random.randint(0,4)]
             pet.motivate = True
         elif event.type == quote_length:
             pet.motivate = False
@@ -171,6 +173,7 @@ while not done:
             elif event.button == 3:
                 pet.status = "pat"
                 pet.status_count = 70
+                pet.dir = 0
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 pet.tracking = 0
