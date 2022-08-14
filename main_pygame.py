@@ -108,7 +108,7 @@ class Pet(pygame.sprite.Sprite):
                 self.falling = 0
         elif self.image_delay < 1:
             if self.motivate and self.advice_text != "":
-                speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
+                speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 80)
             self.image_num = (self.image_num+1)%4 # chooses animation (%4 because there are 4 images per animation cycle)
             # label the animations carefully in format [ACTIONNAME][NUMBER FROM 0-3].png
             self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+"\\"+self.status+str(self.image_num+self.dir*4)+".png").convert_alpha()
