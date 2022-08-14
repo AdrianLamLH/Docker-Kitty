@@ -81,8 +81,7 @@ class Pet(pygame.sprite.Sprite):
                                                    # at the end of the list)
         self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!"]
         self.motivate = 0
-        # self.status_list = ["sleepb"]
-        self.status = self.status_list[random.randint(0,4)] # idle as default
+        self.status = self.status_list[random.randint(0,3)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
     
     def update(self):
@@ -104,7 +103,7 @@ class Pet(pygame.sprite.Sprite):
             if (self.status_count < 1): # choose a random new move and the amount of times it does that same action
                                         # given current action is out of moves
                 self.dir = 0
-                self.status = self.status_list[random.randint(0,4)]
+                self.status = self.status_list[random.randint(0,3)]
                 self.status_count = random.randint(10,70)
                 if (self.status == "walk"):
                     self.dir = random.randint(0,1) # choose random direction if walking chosen
@@ -148,21 +147,29 @@ while not done:
         elif event.type == quote_length:
             pet.motivate = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            x,y = event.pos
-            if pet.rect.collidepoint(x,y):
-                pet.tracking = 1
-                pet.dir = 0
-                pet.image = pet.image_pick_up
-                pet.status = pet.status_list[0] # picked up status
+            if event.button == 1:
+                x,y = event.pos
+                if pet.rect.collidepoint(x,y):
+                    pet.tracking = 1
+                    pet.dir = 0
+                    pet.image = pet.image_pick_up
+                    pet.status = pet.status_list[0] # picked up status
+            elif event.button == 3:
+                pet.status = "pat"
+                pet.status_count = 70
         elif event.type == pygame.MOUSEBUTTONUP:
-            pet.tracking = 0
-            pet.falling = 1
-            pet.image = pet.image_fall
-            pet.dir = 0
+            if event.button == 1:
+                pet.tracking = 0
+                pet.falling = 1
+                pet.image = pet.image_fall
+                pet.dir = 0
+            if event.button == 3:
+                pet.status_count = 0
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_F10:
                 pet.rect.center = ((screen_bounds["MAX_R"]-screen_bounds["MIN"])/2, (screen_bounds["MAX_B"]-screen_bounds["MIN"])/2)
                 pet.falling = 1
+                pet.image = pet.image_fall
 
 
     screen.fill(transparency) # Transparent background
