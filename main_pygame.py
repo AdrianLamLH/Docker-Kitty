@@ -93,8 +93,6 @@ class Pet(pygame.sprite.Sprite):
             elif (self.dir == 1):
                 self.dir = 0
     def quote(self, screen):
-        while self.motivate != 5:
-            self.motivate += 1
             speech_bubble(screen, str(self.checkin[random.randint(0,2)]), (000, 000, 000), (250, 250, 250), self.rect.midtop, 40)
 
 # keep track of all the sprites currently existing (i.e. just the pet sprite atm)
