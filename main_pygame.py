@@ -27,7 +27,7 @@ win32gui.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 1)
 # Initialize internal clock
 clock = pygame.time.Clock()
 
-quote_length_time = 60000
+quote_length_time = 4000
 quote_frequency = 12000
 
 
@@ -42,29 +42,18 @@ def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
     bg_rect = text_rect.copy()
     bg_rect.inflate_ip(20, 20)
 
+    #frame
+    frame_rect = bg_rect.copy()
+    frame_rect.inflate_ip(4,4)
+
+    # pygame.draw.rect(screen, bg_colour, bg_rect)
+    pygame.draw.rect(screen, text_colour, frame_rect)
     pygame.draw.rect(screen, bg_colour, bg_rect)
     screen.blit(text_surface, text_rect)
 
 
 screen_bounds = {"MIN":-58,"MAX_B":screen_size.current_h-184,"MAX_R":screen_size.current_w-150}
-#Speech Class
-'''class speech_bubble(pygame.sprite.Sprite):
-    def __init__(self, text, text_colour, bg_colour, pos, size):
-        super().__init__()
-        self.pos = pos
-        self.text = text
-        self.size = size
-        self.text_colour = text_colour
-        self.bg_colour = bg_colour
-        self.font = pygame.font.SysFont(None, self.size)
-        self.text_surface = self.font.render(self.text, True, self.text_colour)
-        self.text_rect = self.text_surface.get_rect(midbottom=self.pos)
-        # background
-        self.bg_rect = self.text_rect.copy()
-        #self.bg_rect.inflate_ip(20, 20)
-    def create(self):
-        pygame.draw.rect(screen, self.bg_colour, self.bg_rect)
-        screen.blit(self.text_surface, self.text_rect)'''
+        
 
 # Pet Class
 class Pet(pygame.sprite.Sprite):
@@ -88,8 +77,8 @@ class Pet(pygame.sprite.Sprite):
         self.falling = 0 # checks if pet falling
         self.status_list = ["idle","walk","sleepb","wag","pat"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "API QUOTE"]
-        self.motivate = True
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!"]
+        self.motivate = 0
         # self.status_list = ["sleepb"]
         self.status = self.status_list[random.randint(0,4)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
@@ -132,7 +121,6 @@ class Pet(pygame.sprite.Sprite):
             if self.motivate and self.advice_text != "":
                 speech_bubble(screen, str(self.advice_text), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
             self.image_delay -= 1
-    
 
 # keep track of all the sprites currently existing (i.e. just the pet sprite atm)
 all_sprites_list = pygame.sprite.Group()
@@ -173,7 +161,6 @@ while not done:
     screen.fill(transparency) # Transparent background
     # --- Game logic should go here
     all_sprites_list.update() # runs the update function for all sprites in the list
-    #pet.update()
     # --- Drawing code should go here
     all_sprites_list.draw(screen) # draws all the sprites onto the screen (must redraw every cycle of loop like so)
     # Updates screen
