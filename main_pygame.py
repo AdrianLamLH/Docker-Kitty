@@ -41,8 +41,8 @@ win32gui.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 1)
 # Initialize internal clock
 clock = pygame.time.Clock()
 
-quote_length_time = 4000
-quote_frequency = 5000
+quote_length_time = 5000
+quote_frequency = 50000
 
 #speech bubble
 def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
@@ -157,7 +157,7 @@ while not done:
         elif event.type == quote:
             #Sets up timer for quotes
             pygame.time.set_timer(quote_length, quote_length_time)
-            pet.advice_text = pet.checkin[0,14]
+            pet.advice_text = pet.checkin[random.randint(0,14)]
             pet.motivate = True
         elif event.type == quote_length:
             pet.motivate = False
