@@ -36,7 +36,7 @@ class Pet(pygame.sprite.Sprite):
         self.image_num = 0 # counts which frame of animation it's on
         # loads in a default initial frame to be idle
         self.dir = 0 # 0 is left, 1 is right
-        self.image = pygame.image.load(self.m_cwd+"\pet_animations\idle"+str(self.image_num+self.dir*4)+".png")
+        self.image = pygame.image.load(self.m_cwd+"\pet_animations\idle\idle"+str(self.image_num+self.dir*4)+".png")
         self.image = pygame.transform.scale(self.image,(200,200)) # scale image to size
         self.rect = self.image.get_rect() # makes the image an interactable sprite object
         self.rect.x = x # pet sprite coordinates
@@ -51,7 +51,7 @@ class Pet(pygame.sprite.Sprite):
     def update(self):
         self.image_num = (self.image_num+1)%4 # chooses animation (%4 because there are 4 images per animation cycle)
         # label the animations carefully in format [ACTIONNAME][NUMBER FROM 0-3].png
-        self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+str(self.image_num+self.dir*4)+".png")
+        self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+"\\"+self.status+str(self.image_num+self.dir*4)+".png")
         self.image = pygame.transform.scale(self.image,(200,200))
         self.status_count-= 1 # decreases move counter to acknowledge a move is made
         if (self.status_count < 1): # choose a random new move and the amount of times it does that same action
@@ -96,4 +96,4 @@ while not done:
     pygame.display.flip()
  
     # Determine FPS
-    clock.tick(4)
+    clock.tick(30)
