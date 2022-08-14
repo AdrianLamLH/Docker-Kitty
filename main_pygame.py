@@ -43,24 +43,7 @@ def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
 
 
 screen_bounds = {"MIN":-58,"MAX_B":screen_size.current_h-184,"MAX_R":screen_size.current_w-150}
-#Speech Class
-'''class speech_bubble(pygame.sprite.Sprite):
-    def __init__(self, text, text_colour, bg_colour, pos, size):
-        super().__init__()
-        self.pos = pos
-        self.text = text
-        self.size = size
-        self.text_colour = text_colour
-        self.bg_colour = bg_colour
-        self.font = pygame.font.SysFont(None, self.size)
-        self.text_surface = self.font.render(self.text, True, self.text_colour)
-        self.text_rect = self.text_surface.get_rect(midbottom=self.pos)
-        # background
-        self.bg_rect = self.text_rect.copy()
-        #self.bg_rect.inflate_ip(20, 20)
-    def create(self):
-        pygame.draw.rect(screen, self.bg_colour, self.bg_rect)
-        screen.blit(self.text_surface, self.text_rect)'''
+        
 
 # Pet Class
 class Pet(pygame.sprite.Sprite):
@@ -79,8 +62,8 @@ class Pet(pygame.sprite.Sprite):
         self.speed = 10 # how fast pet moves
         self.status_list = ["idle","walk","sleepb"] # list of behaviours (it's ordered so add new moves
                                                    # at the end of the list)
-        self.checkin = ["Did you exercise today?", "Did you drink water?", "API QUOTE"]
-        self.motivate = True
+        self.checkin = ["Did you exercise today?", "Did you drink water?", "You got this!", "Make sure to take plenty of breaks!"]
+        self.motivate = 0
         # self.status_list = ["sleepb"]
         self.status = self.status_list[random.randint(0,2)] # idle as default
         self.status_count = 1 # counter for iterating frames after every tick
@@ -92,9 +75,6 @@ class Pet(pygame.sprite.Sprite):
         self.image = pygame.image.load(self.m_cwd+"\pet_animations\\"+self.status+"\\"+self.status+str(self.image_num+self.dir*4)+".png")
         self.image = pygame.transform.scale(self.image,(200,200))
         self.status_count-= 1 # decreases move counter to acknowledge a move is made
-        if self.motivate:
-
-            speech_bubble(screen, str(self.checkin[random.randint(0,2)]), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
         if (self.status_count < 1): # choose a random new move and the amount of times it does that same action
                                     # given current action is out of moves
             self.dir = 0
@@ -108,14 +88,14 @@ class Pet(pygame.sprite.Sprite):
                 self.rect.x = (self.rect.x - self.speed) # move the character given it's current direction
             elif (self.dir ==0):
                 self.dir = 1
-            elif (self.dir == 1) and ((self.rect.x + self.speed)<screen_bounds["MAX_R"]):                        # stop if out of bounds
+            elif (self.dir == 1) and ((self.rect.x + self.speed)<screen_bounds["MAX_R"]):  # stop if out of bounds
                 self.rect.x = self.rect.x + self.speed
             elif (self.dir == 1):
                 self.dir = 0
     def quote(self, screen):
-        screen.blit(self.image, self.rect.topleft)
-        if self.motivate == True:
-            speech_bubble(screen, str(self.checkin[random.randint(0,2)]), (255, 255, 255), (0, 0, 0), self.rect.midtop, 40)
+        while self.motivate != 5:
+            self.motivate += 1
+            speech_bubble(screen, str(self.checkin[random.randint(0,2)]), (000, 000, 000), (250, 250, 250), self.rect.midtop, 40)
 
 # keep track of all the sprites currently existing (i.e. just the pet sprite atm)
 all_sprites_list = pygame.sprite.Group()
@@ -124,25 +104,21 @@ all_sprites_list.add(pet)
 
 #Sets up timer for quotes
 quote = pygame.USEREVENT+1
-pygame.time.set_timer(quote, 1000)
+pygame.time.set_timer(quote, 10000)
 
 # Main game loop
 while not done:
+    screen.fill(transparency) # Transparent background
     # Events loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # Quit upon click close button
             done = True
         if event.type == quote:
             pet.quote(screen)
-
-
-    screen.fill(transparency) # Transparent background
     # --- Game logic should go here
     all_sprites_list.update() # runs the update function for all sprites in the list
-    #pet.update()
     # --- Drawing code should go here
     all_sprites_list.draw(screen) # draws all the sprites onto the screen (must redraw every cycle of loop like so)
-    #pet.draw(screen)
     # Updates screen
     pygame.display.flip()
  
