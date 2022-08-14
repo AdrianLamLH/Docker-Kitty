@@ -66,8 +66,10 @@ class Pet(pygame.sprite.Sprite):
         self.dir = 0 # 0 is left, 1 is right
         self.image = pygame.image.load(self.m_cwd+"\pet_animations\idle\idle"+str(self.image_num+self.dir*4)+".png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(200,200)) # scale image to size
-        self.image_fall = pygame.image.load(self.m_cwd+"\pet_animations\\sleep\\sleep2.png").convert_alpha()
+        self.image_fall = pygame.image.load(self.m_cwd+"\pet_animations\\CF.png").convert_alpha()
         self.image_fall = pygame.transform.scale(self.image_fall,(200,200))
+        self.image_pick_up = pygame.image.load(self.m_cwd+"\pet_animations\\PUC.png").convert_alpha()
+        self.image_pick_up = pygame.transform.scale(self.image_pick_up,(200,200))
         self.rect = self.image.get_rect() # makes the image an interactable sprite object
         self.rect.x = x # pet sprite coordinates
         self.rect.y = y
@@ -150,12 +152,17 @@ while not done:
             if pet.rect.collidepoint(x,y):
                 pet.tracking = 1
                 pet.dir = 0
-                pet.image = pet.image_fall
+                pet.image = pet.image_pick_up
                 pet.status = pet.status_list[0] # picked up status
         elif event.type == pygame.MOUSEBUTTONUP:
             pet.tracking = 0
             pet.falling = 1
+            pet.image = pet.image_fall
             pet.dir = 0
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_F10:
+                pet.rect.center = ((screen_bounds["MAX_R"]-screen_bounds["MIN"])/2, (screen_bounds["MAX_B"]-screen_bounds["MIN"])/2)
+                pet.falling = 1
 
 
     screen.fill(transparency) # Transparent background
