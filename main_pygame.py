@@ -38,6 +38,12 @@ def speech_bubble(screen, text, text_colour, bg_colour, pos, size):
     bg_rect = text_rect.copy()
     bg_rect.inflate_ip(20, 20)
 
+    #frame
+    frame_rect = bg_rect.copy()
+    frame_rect.inflate_ip(4,4)
+
+    # pygame.draw.rect(screen, bg_colour, bg_rect)
+    pygame.draw.rect(screen, text_colour, frame_rect)
     pygame.draw.rect(screen, bg_colour, bg_rect)
     screen.blit(text_surface, text_rect)
 
