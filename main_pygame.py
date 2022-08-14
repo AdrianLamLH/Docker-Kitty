@@ -6,8 +6,22 @@ import win32gui
 import random
 import os
 import time
+import requests
 from threading import Timer
 pygame.init()
+
+url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
+
+querystring = {"lon":"-118","lat":"34"}
+
+headers = {
+	"X-RapidAPI-Key": "ee7bf798a6msh35a2e659e32f426p1dea94jsnc8ef175b5a09",
+	"X-RapidAPI-Host": "weatherbit-v1-mashape.p.rapidapi.com"
+}
+
+response = requests.request("GET", url, headers=headers, params=querystring)
+
+print(response.text)
 
 # Initialize start loop condition
 done = False
